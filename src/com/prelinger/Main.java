@@ -5,7 +5,7 @@ public class Main {
 
     // Compute distance between two points
     public static void main(String[] arg) {
-        chapter3_9();
+        chapter3_11();
     }
 
     static void chapter3_1() {
@@ -113,28 +113,29 @@ public class Main {
         int day = In.readInt();
         int month = In.readInt();
         int year = In.readInt();
-        int first_day = In.readInt();
-        int days_in_february = 29;
+        int first_day = In.readInt() - 1;
+        int days_in_february = 28;
         if(year % 4 == 0 && !(year % 100 == 0 && year % 400 != 0)) {
-            days_in_february = 28;
+            days_in_february = 29;
+            Out.println("Schaltjahr");
         }
-        int week_day = first_day;
+        int week_day = 0;
         for(int i_month = 1; i_month < month; i_month++) {
             int max_days = 30;
-            switch (month) {
+            switch (i_month) {
                 case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-                    max_days = 31;
+                    week_day += 31;
+                    break;
                 case 2:
-                    max_days = days_in_february;
+                    week_day += days_in_february;
+                    break;
+                default:
+                    week_day += 30;
+                    break;
             }
-            week_day = (week_day + max_days % 7) % 7;
+            Out.println(week_day);
         }
-        Out.println(day % 7);
-        Out.println(week_day);
-
-        week_day = day % 7 - week_day;
-        Out.println(week_day);
-
+        week_day = (week_day + day + first_day) % 7;
         switch (week_day) {
             case 1:
                 Out.println("Montag");
@@ -154,9 +155,89 @@ public class Main {
             case 6:
                 Out.println("Samstag");
                 break;
-            case 7:
+            case 0:
                 Out.println("Sonntag");
                 break;
         }
+    }
+
+    static void chapter3_10() {
+        In.open("input.txt");
+        int a = In.readInt();
+        int b = In.readInt();
+        int c =a + b;
+        if(a>0 && b>0 && c<0) {
+                Out.println("Überlauf");
+        } else if(a<0 && b<0 && c>0) {
+                Out.println("Überlauf");
+
+        } else {
+            Out.println("Kein Überlauf");
+        }
+        In.close();
+        Out.println(c);
+    }
+
+    static void chapter3_11() {
+        In.open("input.txt");
+        if (In.readInt() == 1) {
+            int xa1 = In.readInt();
+            int ya1 = In.readInt();
+            int xa2 = In.readInt();
+            int ya2 = In.readInt();
+
+            int xb1 = In.readInt();
+            int yb1 = In.readInt();
+            int xb2 = In.readInt();
+            int yb2 = In.readInt();
+            Out.print("[("+xa1+","+ya1+"),("+xa2+","+ya2+")] schneidet ");
+            Out.print("[("+xb1+","+yb1+"),("+xb2+","+yb2+")] ");
+            In.close();
+
+            if ((xa1 == xa2 || ya1 == ya2) && (xb1 == xb2 || yb1 == yb2)) {
+                if ((xa1 >= xb1 && xa1 <= xb2) || (xa1 <= xb1 && xa1 >= xb2) || (xa2 >= xb1 && xa2 <= xb2) || (xa2 <= xb1 && xa2 >= xb2)) {
+                    Out.println("Wahr");
+                    if ((ya1 >= yb1 && ya1 <= yb2) || (ya1 <= yb1 && ya1 >= yb2) || (ya2 >= yb1 && ya2 <= yb2) || (ya2 <= yb1 && ya2 >= yb2)
+                            || (yb1 >= ya1 && yb1 <= ya2) || (yb1 <= ya1 && yb1 >= ya2) || (yb2 >= ya1 && yb2 <= ya2) || (yb2 <= ya1 && yb2 >= ya2)) {
+                        Out.println("Schnittpunkt");
+                    }
+                }
+            }
+        } else {
+            int ax1 = In.readInt();  // line a: [(ax1,ay1), (ax2,ay2)]
+            int ay1 = In.readInt();
+            int ax2 = In.readInt();
+            int ay2 = In.readInt();
+            int bx1 = In.readInt();  // line b: [(bx1,by1), (bx2,by2)]
+            int by1 = In.readInt();
+            int bx2 = In.readInt();
+            int by2 = In.readInt();
+            In.close();
+
+
+            // check for valid input data
+            if (ax1 != ax2 && ay1 != ay2) Out.println("a muss horizontal oder vertikal sein");
+            else if (bx1 != bx2 && by1 != by2) Out.println("b muss horizontal oder vertikal sein");
+            else {
+
+                // normalize so that x1 <= x2 and y1 <= y2
+                int h;
+                if (ax1 > ax2) {h = ax1; ax1 = ax2; ax2 = h;} // ay1 == ay2
+                if (ay1 > ay2) {h = ay1; ay1 = ay2; ay2 = h;} // ax1 == ay1
+
+                // check if a and b intersect
+                Out.print("[("+ax1+","+ay1+"),("+ax2+","+ay2+")] schneidet ");
+                Out.print("[("+bx1+","+by1+"),("+bx2+","+by2+")] ");
+                if (bx1 > ax2 || bx2 < ax1 || by1 > ay2 || by2 < ay1)
+                    Out.println("nicht");
+                else
+                    Out.println();
+
+            }
+        }
+    }
+
+    static void chapter3_12() {
+
     }
 }
