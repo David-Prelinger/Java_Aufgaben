@@ -5,7 +5,7 @@ public class Main {
 
     // Compute distance between two points
     public static void main(String[] arg) {
-        chapter3_11();
+        chapter5_2_a();
     }
 
     static void chapter3_1() {
@@ -239,5 +239,73 @@ public class Main {
 
     static void chapter3_12() {
 
+    }
+
+    static void chapter5_1() {
+        double pi = 0;
+        boolean isNegative = false;
+        for(double i=1; i<=800000; i+=2) {
+            if(isNegative) {
+               pi -= 1/i;
+            } else {
+                pi += 1/i;
+            }
+            isNegative = !isNegative;
+        }
+        pi = pi * 4;
+        Out.println(pi);
+    }
+
+    static void chapter5_2() {
+        In.open("input.txt");
+        double x = In.readDouble();
+        Out.println("Input:" + x);
+        double formula = x;
+        double result = x;
+        for(double i=1; i < 100; i++) {
+            formula *= (x * x * (2 * i - 1) * (2 * i - 1)) / (2 * i * ( 2 * i + 1));
+            result += formula;
+        }
+        Out.println("Output in rad:" + result);
+    }
+
+    static void chapter5_2_a() {
+        In.open("input.txt");
+        double x = In.readDouble();
+        double arcsin = 0;
+        for(int i=0; i<=0; i++) {
+            double fak2i = 1;
+            for(double j=i*2;j>=1;j--) {
+                fak2i *= j;
+            }
+            double faki = 0;
+            for(double k=i;k>=1;k--) {
+                fak2i *= k;
+            }
+            double power2i = 1;
+            for (int l=0;l<=2*i;l++) {
+                power2i *= 2;
+            }
+            double xpower2iplus1 = 1;
+            for (int s=0;s<=2*i+1;s++) {
+                xpower2iplus1 *= x;
+            }
+            double result = (fak2i * xpower2iplus1) / (power2i * faki * (2*i+1));
+            arcsin += result;
+        }
+        Out.println(arcsin);
+    }
+
+    static void chapter5_3() {
+        In.open("input.txt");
+        double capital = In.readDouble();
+        double interest = In.readDouble();
+        double years = In.readDouble();
+        In.close();
+        Out.println("YEAR | CAPITAL");
+        for(int i = 0; i<=years; i++) {
+            Out.println(i + "   " + capital);
+            capital *= interest;
+        }
     }
 }
