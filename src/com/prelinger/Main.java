@@ -5,7 +5,17 @@ public class Main {
 
     // Compute distance between two points
     public static void main(String[] arg) {
-        chapter5_2_a();
+        chapter7_9();
+        /*float[][] a = readMatrix();
+        printMatrix(a);
+        a = eliminate(a);
+        printMatrix(a);
+        float[] res = solution(a);
+        Out.println();
+        for (int i = 0; i < res.length; i++)
+            Out.print(" " + res[i]);
+            */
+
     }
 
     static void chapter3_1() {
@@ -307,5 +317,116 @@ public class Main {
             Out.println(i + "   " + capital);
             capital *= interest;
         }
+    }
+
+    static void chapter4_5a() {
+        Out.print("Geben Sie eine positive ganze Zahl ein (Ende = Strg-C): ");
+        int x = In.readInt();
+
+        while (In.done()) {
+            Out.print('{');
+            int pos = 0;
+            boolean first = true;
+            while (x > 0) {
+                if (x % 2 == 1) {
+                    if (first) first = false; else Out.print(',');
+                    Out.print(pos);
+                }
+                x = x / 2; pos++;
+            }
+            Out.println('}');
+            Out.print("a");
+            Out.print("b");
+
+            Out.print("c");
+
+            Out.println();
+            Out.print("Geben Sie eine positive ganze Zahl ein (Ende = Strg-C): ");
+            x = In.readInt();
+        }
+    }
+
+
+    public static void chapter7_9() {
+        float[][] matrix = readMatrix();
+        for(int row = 1; row < matrix.length; row++) {
+            matrix = killFactorOf(row, matrix);
+        }
+        solve(matrix);
+        printMatrix(matrix);
+        Out.println();
+        for(int i = 0; i<matrix.length; i++) {
+            Out.println(matrix[i][matrix.length]);
+        }
+    }
+
+    public static float[][] killFactorOf(int row, float[][] matrix) {
+        float factor1 = matrix[row-1][row-1] * -1;
+        for (int j = row; j < matrix.length; j++) {
+            float factor2 = matrix[j][row-1];
+            Out.println();
+            for (int i = 0; i <= matrix.length; i++) {
+                matrix[j][i] = matrix[j][i] * factor1 + matrix[row-1][i] * factor2;
+            }
+        }
+        return matrix;
+    }
+
+    public static float[][] solve(float[][] matrix) {
+        for (int i = matrix.length - 1; i>=0; i--) {
+            for (int j = i + 1; j < matrix.length; j++) {
+                matrix[i][matrix.length] -= matrix[i][j] * matrix[j][matrix.length];
+                matrix[i][j] = 0;
+            }
+            matrix[i][matrix.length] = matrix[i][matrix.length] / matrix[i][i];
+            matrix[i][i] = 1;
+        }
+        return matrix;
+    }
+
+    public static float[][] readMatrix() {
+        In.open("input.txt");
+        int n = In.readInt();
+        float[][] matrix = new float[n][n+1];
+        for(int i = 0; i < n; i++) { //read Row
+            for(int j = 0; j <= n; j++) { //read Column
+                matrix[i][j] = In.readInt();
+            }
+        }
+        return matrix;
+    }
+
+    public static void printMatrix(float[][] matrix) {
+        for(int i = 0; i < matrix.length; i++) {
+            for(int j = 0; j < matrix[i].length; j++) {
+                Out.print(matrix[i][j] + " ");
+            }
+            Out.println();
+        }
+    }
+
+
+    static float[][] eliminate(float[][] a) {
+        for (int i = 0; i < a.length; i++) {
+            for (int j = i+1; j < a.length; j++) {
+                float c = a[j][i] / a[i][i];
+                for (int k = i; k < a[0].length; k++) {
+                    a[j][k] -= a[i][k] * c;
+                }
+            }
+        }
+        return a;
+    }
+
+    // Compute the solution vector from a
+    static float[] solution(float[][] a) {
+        int n = a.length;
+        float[] res = new float[n];
+        for (int i = n-1; i >= 0; i--) {
+            for (int j = i+1; j < n; j++)
+                a[i][n] -= a[i][j] * res[j];
+            res[i] = a[i][n] / a[i][i];
+        }
+        return res;
     }
 }
